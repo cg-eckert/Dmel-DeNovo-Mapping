@@ -46,7 +46,8 @@ W2_2=w2_2S.fastq
 cd /mnt
 rm -r QC
 mkdir /mnt/QC
-/usr/local/share/FastQC/fastqc /data/*.fastq --outdir=/mnt/QC
+#/usr/local/share/FastQC/fastqc /mnt/map/*.fastq --outdir=/mnt/QC
+/usr/local/share/FastQC/fastqc /mnt/map/*S.fastq --outdir=/mnt/QC
 
 #Interleave the paired end reads in preparation for fastx trimming
 
