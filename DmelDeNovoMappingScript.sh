@@ -14,10 +14,10 @@ cd /
 
 #Make little read files with 10,000 reads each and write to /mnt/map. Note that we use the same seed for the paired reads so that the same reads are sampled
 cd /data
-seqtk sample -s 99 OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq 100000 > /mnt/map/vg1_100k_1.fastq
-seqtk sample -s 99 OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq 100000 > /mnt/map/vg1_100k_2.fastq
-seqtk sample -s 53 OREf_SAMm_w_GTCCGC_L006_R1_001.fastq 100000 > /mnt/map/w_100k_1.fastq
-seqtk sample -s 53 OREf_SAMm_w_GTCCGC_L006_R2_001.fastq 100000 > /mnt/map/w_100k_2.fastq
+seqtk sample -s 11 OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq 10000 > /mnt/map/vg1_10k_1.fastq
+seqtk sample -s 11 OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq 10000 > /mnt/map/vg1_10k_2.fastq
+seqtk sample -s 11 OREf_SAMm_w_GTCCGC_L006_R1_001.fastq 10000 > /mnt/map/w_10k_1.fastq
+seqtk sample -s 11 OREf_SAMm_w_GTCCGC_L006_R2_001.fastq 10000 > /mnt/map/w_10k_2.fastq
 
 cd /mnt
 #Start with some read QC
@@ -34,8 +34,8 @@ mkdir QC
 
 #Little read files: Interleave the paired end reads in preparation for fastx trimming
 cd /mnt/map
-python /usr/local/share/khmer/sandbox/interleave.py vg1_100k_1.fastq vg1_100k_2.fastq > vg.combined.fastq
-python /usr/local/share/khmer/sandbox/interleave.py w_100k_1.fastq w_100k_1.fastq > w.combined.fastq
+python /usr/local/share/khmer/sandbox/interleave.py vg1_10k_1.fastq vg1_10k_2.fastq > vg.combined.fastq
+python /usr/local/share/khmer/sandbox/interleave.py w_10k_1.fastq w_10k_2.fastq > w.combined.fastq
 
 
 cd /mnt/map
