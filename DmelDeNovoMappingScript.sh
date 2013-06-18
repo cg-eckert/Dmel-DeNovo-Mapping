@@ -47,7 +47,7 @@ bowtie denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.sam
 cp /data/dmel_trinity/Trinity.fasta /mnt/map/Trinity.fasta
 echo "******converting SAM to BAM********"
 samtools faidx Trinity.fasta
-for i in vg1 vg2 w1 w2 ; do
+for i in vg w ; do
   samtools view -Sb $i.sam > $i.temp.bam
   samtools sort -f $i.temp.bam $i.bam
   samtools index $i.bam
