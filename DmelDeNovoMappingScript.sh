@@ -55,27 +55,20 @@ bowtie-build /data/dmel_trinity/Trinity.fasta /mnt/map/denovo_bowtie
 # Map with bowtie
 echo "******** MAPPING WITH BOWTIE*********"
 cd /mnt/map
-bowtie denovo_bowtie vg.trimmed.fq.1 vg.1.sam
-bowtie denovo_bowtie vg.trimmed.fq.2 vg.2.sam
-bowtie denovo_bowtie w.trimmed.fq.1 w.1.sam
-bowtie denovo_bowtie w.trimmed.fq.2 w.2.sam
+bowtie -S -p 2 denovo_bowtie -1 vg.trimmed.fq.1 -2 vg.trimmed.fq.2 vg.paired.sam
+bowtie -S -p 2 denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.paired.sam
 
 # Convert SAM files to indexed BAM files
 echo "******converting SAM to BAM********"
-cp /data/dmel_trinity/Trinity.fasta /mnt/map/Trinity.fasta
-samtools faidx /mnt/map/Trinity.fasta
-samtools view -bt Trinity.fasta.fai vg.1.sam > vg.1.temp.bam
-samtools view -bt Trinity.fasta.fai vg.2.sam > vg.2.temp.bam
-samtools view -bt Trinity.fasta.fai w.1.sam > w.1.temp.bam
-samtools view -bt Trinity.fasta.fai w.2.sam > w.2.temp.bam
-samtools sort -f vg.1.temp.bam vg.1.bam
-samtools sort -f vg.2.temp.bam vg.2.bam
-samtools sort -f w.1.temp.bam w.1.bam
-samtools sort -f w.2.temp.bam w.2.bam
-samtools index vg.1.bam
-samtools index vg.2.bam
-samtools index w.1.bam
-samtools index w.2.bam
+samtools view -bS vg.paired.sam > vg.temp.bam
+samtools view -bS w.paired.sam > w.temp.bam
+
+samtools sort -f vg.temp.bam vg.paired.bam
+samtools sort -f w.temp.bam w.paired.bam
+
+samtools index vg.paired.bam
+samtools index w.paired.bam
+
 rm *.temp.bam
 echo "********* SAMs have been BAMed *************"
 
