@@ -41,7 +41,7 @@ bowtie-build /data/dmel_trinity/Trinity.fasta /mnt/map/denovo_bowtie
 echo "******** MAPPING WITH BOWTIE*********"
 cd /mnt/map
 bowtie denovo_bowtie -1 vg.trimmed.fq.1 -2 vg.trimmed.fq.2 vg.sam
-bowtie denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w1.sam
+bowtie denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.sam
 
 # Convert SAM files to indexed BAM files
 cp /data/dmel_trinity/Trinity.fasta /mnt/map/Trinity.fasta
