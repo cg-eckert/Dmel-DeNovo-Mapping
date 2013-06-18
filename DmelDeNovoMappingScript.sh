@@ -10,17 +10,33 @@ cd /
 #OREf_SAMm_w_GTCCGC_L006_R1_001.fastq
 #OREf_SAMm_w_GTCCGC_L006_R2_001.fastq
 
+#mkdir /mnt/map
+
+#Make little read files with 10,000 reads each and write to /mnt/map
+cd /data
+head -40000 OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq > /mnt/map/vg1_10k_1.fastq
+head -40000 OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq > /mnt/map/vg1_10k_2.fastq
+head -40000 OREf_SAMm_w_GTCCGC_L006_R1_001.fastq > /mnt/map/w_10k_1.fastq
+head -40000 OREf_SAMm_w_GTCCGC_L006_R2_001.fastq > /mnt/map/w_10k_2.fastq
+
+cd /mnt
 #Start with some read QC
-#mkdir /mnt/QC
+mkdir QC
 #/usr/local/share/FastQC/fastqc /data/*.fastq --outdir=/mnt/QC
+/usr/local/share/FastQC/fastqc /mnt/map/*.fastq --outdir=/mnt/QC
 
 #All other files will be written to /mnt/map
-mkdir /mnt/map
 
 #Interleave the paired end reads in preparation for fastx trimming
-cd /data
-python /usr/local/share/khmer/sandbox/interleave.py OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq > /mnt/map/vg.combined.fastq
-python /usr/local/share/khmer/sandbox/interleave.py OREf_SAMm_w_GTCCGC_L006_R1_001.fastq OREf_SAMm_w_GTCCGC_L006_R2_001.fastq > /mnt/map/w.combined.fastq
+#cd /data
+#python /usr/local/share/khmer/sandbox/interleave.py OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq > /mnt/map/vg.combined.fastq
+#python /usr/local/share/khmer/sandbox/interleave.py OREf_SAMm_w_GTCCGC_L006_R1_001.fastq OREf_SAMm_w_GTCCGC_L006_R2_001.fastq > /mnt/map/w.combined.fastq
+
+#Little read files: Interleave the paired end reads in preparation for fastx trimming
+cd /mnt/map
+python /usr/local/share/khmer/sandbox/interleave.py vg1_10k_1.fastq vg1_10k_2.fastq > vg.combined.fastq
+python /usr/local/share/khmer/sandbox/interleave.py w_10k_1.fastq w_10k_1.fastq > w.combined.fastq
+
 
 cd /mnt/map
 #Use the FASTX toolkit to trim off bases over 70 (replace with new number)
