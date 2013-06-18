@@ -40,8 +40,8 @@ bowtie-build /data/dmel_trinity/Trinity.fasta /mnt/map/denovo_bowtie
 # Map with bowtie
 echo "******** MAPPING WITH BOWTIE*********"
 cd /mnt/map
-bowtie denovo_bowtie -1 vg.trimmed.fq.1 -2 vg.trimmed.fq.2 vg.sam
-bowtie denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.sam
+bowtie -S -p 2 denovo_bowtie -1 vg.trimmed.fq.1 -2 vg.trimmed.fq.2 vg.sam
+bowtie -S -p 2 denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.sam
 
 # Convert SAM files to indexed BAM files
 cp /data/dmel_trinity/Trinity.fasta /mnt/map/Trinity.fasta
@@ -59,7 +59,7 @@ echo "********* SAMs have been BAMed *************"
 # Using bedtools to calculate read counts
 echo "********bedtools analysis starting*********"
 cd /mnt/map
-for i in vg1 vg2 w1 w2 ; do
+for i in vg w ; do
   coverageBed -s -abam $i.bam -b /data/dmel_trinity/final_dmel.bed > $i.counts.txt
 done
 
