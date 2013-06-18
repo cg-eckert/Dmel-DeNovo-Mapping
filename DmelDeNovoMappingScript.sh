@@ -12,12 +12,12 @@ cd /
 
 #mkdir /mnt/map
 
-#Make little read files with 10,000 reads each and write to /mnt/map
+#Make little read files with 10,000 reads each and write to /mnt/map. Note that we use the same seed for the paired reads so that the same reads are sampled
 cd /data
-head -40000 OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq > /mnt/map/vg1_10k_1.fastq
-head -40000 OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq > /mnt/map/vg1_10k_2.fastq
-head -40000 OREf_SAMm_w_GTCCGC_L006_R1_001.fastq > /mnt/map/w_10k_1.fastq
-head -40000 OREf_SAMm_w_GTCCGC_L006_R2_001.fastq > /mnt/map/w_10k_2.fastq
+seqtk sample -s 99 OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq 10000 > /mnt/map/vg1_10k_1.fastq
+seqtk sample -s 99 OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq 10000 > /mnt/map/vg1_10k_2.fastq
+seqtk sample -s 53 OREf_SAMm_w_GTCCGC_L006_R1_001.fastq 10000 > /mnt/map/w_10k_1.fastq
+seqtk sample -s 53 OREf_SAMm_w_GTCCGC_L006_R2_001.fastq 10000 > /mnt/map/w_10k_2.fastq
 
 cd /mnt
 #Start with some read QC
