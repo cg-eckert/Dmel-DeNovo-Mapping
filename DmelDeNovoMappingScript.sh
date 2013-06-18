@@ -62,10 +62,11 @@ bowtie denovo_bowtie w.trimmed.fq.2 w.2.sam
 
 # Convert SAM files to indexed BAM files
 echo "******converting SAM to BAM********"
-samtools view -Sb vg.1.sam > vg.1.temp.bam
-samtools view -Sb vg.2.sam > vg.2.temp.bam
-samtools view -Sb w.1.sam > w.1.temp.bam
-samtools view -Sb w.2.sam > w.2.temp.bam
+samtools faidx /data/dmel_trinity/Trinity.fasta
+samtools view -bt /data/dmel_trinity/Trinity.fasta.fai vg.1.sam > vg.1.temp.bam
+samtools view -bt /data/dmel_trinity/Trinity.fasta.fai vg.2.sam > vg.2.temp.bam
+samtools view -bt /data/dmel_trinity/Trinity.fasta.fai w.1.sam > w.1.temp.bam
+samtools view -bt /data/dmel_trinity/Trinity.fasta.fai w.2.sam > w.2.temp.bam
 samtools sort -f vg.1.temp.bam vg.1.bam
 samtools sort -f vg.2.temp.bam vg.2.bam
 samtools sort -f w.1.temp.bam w.1.bam
