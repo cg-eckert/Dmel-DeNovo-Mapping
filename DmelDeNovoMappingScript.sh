@@ -6,10 +6,15 @@ cd /
 #The de novo assembly is in the file /data/dmel_trinity/Trinity.fasta
 
 #The read fastq files are in /data
-DATA1=/data/OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq
-DATA2=/data/OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq
-DATA3=/data/OREf_SAMm_w_GTCCGC_L006_R1_001.fastq
-DATA4=/data/OREf_SAMm_w_GTCCGC_L006_R2_001.fastq
+#DATA1=/data/OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq
+#DATA2=/data/OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq
+#DATA3=/data/OREf_SAMm_w_GTCCGC_L006_R1_001.fastq
+#DATA4=/data/OREf_SAMm_w_GTCCGC_L006_R2_001.fastq
+
+DATA1=/mnt/map/vg1.fastq
+DATA2=/mnt/map/vg2.fastq
+DATA3=/mnt/map/w1.fastq
+DATA4=/mnt/map/w2.fastq
 
 #Start with some read QC
 #mkdir /mnt/QC
@@ -66,6 +71,8 @@ for i in vg w ; do
 done
 
 echo "********bedtools analysis FINISHED********"
+
+R
 
 
 
