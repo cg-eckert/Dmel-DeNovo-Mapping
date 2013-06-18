@@ -59,7 +59,7 @@ python /usr/local/share/khmer/sandbox/interleave.py $W2_1 $W2_2 > /mnt/map/w2.co
 
 cd /mnt/map
 
-for i in vg w ; do
+for i in vg1 vg2 w1 w2 ; do
   #Use the FASTX toolkit to trim off bases over 70 (replace with new number)
   fastx_trimmer -Q33 -l 70 -i $i.combined.fastq > $i.trimmed.fq
   #Split the paired reads 
@@ -74,14 +74,16 @@ bowtie-build /data/dmel_trinity/Trinity.fasta /mnt/map/denovo_bowtie
 # Map with bowtie
 echo "******** MAPPING WITH BOWTIE*********"
 cd /mnt/map
-bowtie -S -p 2 denovo_bowtie -1 vg.trimmed.fq.1 -2 vg.trimmed.fq.2 vg.sam
-bowtie -S -p 2 denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.sam
+bowtie -S -p 2 denovo_bowtie -1 vg1.trimmed.fq.1 -2 vg1.trimmed.fq.2 vg1.sam
+bowtie -S -p 2 denovo_bowtie -1 vg2.trimmed.fq.1 -2 vg2.trimmed.fq.2 vg2.sam
+bowtie -S -p 2 denovo_bowtie -1 w1.trimmed.fq.1 -2 w1.trimmed.fq.2 w1.sam
+bowtie -S -p 2 denovo_bowtie -1 w2.trimmed.fq.1 -2 w2.trimmed.fq.2 w2.sam
 
 # Convert SAM files to indexed BAM files
 cp /data/dmel_trinity/Trinity.fasta /mnt/map/Trinity.fasta
 echo "******converting SAM to BAM********"
 samtools faidx Trinity.fasta
-for i in vg w ; do
+for i in vg1 vg2 w1 w2 ; do
   samtools view -Sb $i.sam > $i.temp.bam
   samtools sort -f $i.temp.bam $i.bam
   samtools index $i.bam
@@ -95,7 +97,7 @@ echo "********bedtools analysis starting*********"
 cd /mnt/map
 cp /data/dmel_trinity/final_dmel.bed temp_dmel.bed
 sed '$d' temp_dmel.bed > final_dmel.bed
-bedtools multicov -q 30 -p -bams vg.bam w.bam -bed final_dmel.bed > transcriptome_counts.txt
+bedtools multicov -q 30 -p -bams vg1.bam vg2.bam w1.bam w2.bam -bed final_dmel.bed > transcriptome_counts.txt
 
 echo "********bedtools analysis FINISHED********"
 
