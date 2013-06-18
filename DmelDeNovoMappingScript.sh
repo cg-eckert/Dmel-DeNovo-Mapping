@@ -59,8 +59,10 @@ echo "********* SAMs have been BAMed *************"
 # Using bedtools to calculate read counts
 echo "********bedtools analysis starting*********"
 cd /mnt/map
+cp /data/dmel_trinity/final_dmel.bed final_dmel.bed
+sed '$d' final_dmel.bed
 for i in vg w ; do
-  coverageBed -s -abam $i.bam -b /data/dmel_trinity/final_dmel.bed > $i.counts.txt
+  bedtools coverage -s -abam $i.bam -b /data/dmel_trinity/final_dmel.bed > $i.counts.txt
 done
 
 echo "********bedtools analysis FINISHED********"
