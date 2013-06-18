@@ -3,49 +3,67 @@ cd /
 #mkdir /data
 #mount -o ro /dev/xvdf /data
 
+mkdir /mnt/map
+
 #The de novo assembly is in the file /data/dmel_trinity/Trinity.fasta
 
-#The read fastq files are in /data/OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq
-#OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq
-#OREf_SAMm_w_GTCCGC_L006_R1_001.fastq
-#OREf_SAMm_w_GTCCGC_L006_R2_001.fastq
+#The read fastq.gz files are in /data2. We need to copy them to a directory where we can unzip them
+cd /data2
+cp OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq.gz /mnt/map/vg1_1.fastq.gz
+cp OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq.gz /mnt/map/vg1_2.fastq.gz
+cp OREf_SAMm_w_GTCCGC_L006_R1_001.fastq.gz /mnt/map/w1_1.fastq.gz
+cp OREf_SAMm_w_GTCCGC_L006_R2_001.fastq.gz /mnt/map/w1_2.fastq.gz
+cp SAMf_OREm_vg1_ACTGAT_L004_R1_001.fastq.gz /mnt/map/vg2_1.fastq.gz
+cp SAMf_OREm_vg1_ACTGAT_L004_R2_001.fastq.gz /mnt/map/vg2_2.fastq.gz
+cp SAMf_OREm_w_CAGATC_L005_R1_001.fastq.gz /mnt/map/w2_1.fastq.gz
+cp SAMf_OREm_w_CAGATC_L005_R2_001.fastq.gz /mnt/map/w2_2.fastq.gz
 
-#mkdir /mnt/map
+cd /mnt/map
+gunzip *.gz
 
-#Make little read files with 10,000 reads each and write to /mnt/map. Note that we use the same seed for the paired reads so that the same reads are sampled
-cd /data
-seqtk sample -s 11 OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq 10000 > /mnt/map/vg1_10k_1.fastq
-seqtk sample -s 11 OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq 10000 > /mnt/map/vg1_10k_2.fastq
-seqtk sample -s 11 OREf_SAMm_w_GTCCGC_L006_R1_001.fastq 10000 > /mnt/map/w_10k_1.fastq
-seqtk sample -s 11 OREf_SAMm_w_GTCCGC_L006_R2_001.fastq 10000 > /mnt/map/w_10k_2.fastq
+for i in *.fastq; do seqtk sample -s 11 $i 10000 > ${i/.fastq/S.fastq}; done
 
-cd /mnt
+#VG1_1=vg1_1.fastq
+#VG1_2=vg1_2.fastq
+#VG2_1=vg2_1.fastq
+#VG2_2=vg2_2.fastq
+#W1_1=w1_1.fastq
+#W1_2=w1_2.fastq
+#W2_1=w2_1.fastq
+#W2_2=w2_2.fastq
+
+VG1_1=vg1_1S.fastq
+VG1_2=vg1_2S.fastq
+VG2_1=vg2_1S.fastq
+VG2_2=vg2_2S.fastq
+W1_1=w1_1S.fastq
+W1_2=w1_2S.fastq
+W2_1=w2_1S.fastq
+W2_2=w2_2S.fastq
+
+
 #Start with some read QC
-mkdir QC
-#/usr/local/share/FastQC/fastqc /data/*.fastq --outdir=/mnt/QC
-/usr/local/share/FastQC/fastqc /mnt/map/*.fastq --outdir=/mnt/QC
-
-#All other files will be written to /mnt/map
+cd /mnt
+rm -r QC
+mkdir /mnt/QC
+/usr/local/share/FastQC/fastqc /data/*.fastq --outdir=/mnt/QC
 
 #Interleave the paired end reads in preparation for fastx trimming
-#cd /data
-#python /usr/local/share/khmer/sandbox/interleave.py OREf_SAMm_vg1_CTTGTA_L005_R1_001.fastq OREf_SAMm_vg1_CTTGTA_L005_R2_001.fastq > /mnt/map/vg.combined.fastq
-#python /usr/local/share/khmer/sandbox/interleave.py OREf_SAMm_w_GTCCGC_L006_R1_001.fastq OREf_SAMm_w_GTCCGC_L006_R2_001.fastq > /mnt/map/w.combined.fastq
 
-#Little read files: Interleave the paired end reads in preparation for fastx trimming
-cd /mnt/map
-python /usr/local/share/khmer/sandbox/interleave.py vg1_10k_1.fastq vg1_10k_2.fastq > vg.combined.fastq
-python /usr/local/share/khmer/sandbox/interleave.py w_10k_1.fastq w_10k_2.fastq > w.combined.fastq
+python /usr/local/share/khmer/sandbox/interleave.py $VG1_1 $VG1_2 > /mnt/map/vg1.combined.fastq
+python /usr/local/share/khmer/sandbox/interleave.py $VG2_1 $VG2_2 > /mnt/map/vg2.combined.fastq
+python /usr/local/share/khmer/sandbox/interleave.py $W1_1 $W1_2 > /mnt/map/w1.combined.fastq
+python /usr/local/share/khmer/sandbox/interleave.py $W2_1 $W2_2 > /mnt/map/w2.combined.fastq
 
 
 cd /mnt/map
-#Use the FASTX toolkit to trim off bases over 70 (replace with new number)
-fastx_trimmer -Q33 -l 70 -i vg.combined.fastq > vg.trimmed.fq
-fastx_trimmer -Q33 -l 70 -i w.combined.fastq > w.trimmed.fq
 
-#Split the paired reads
-python /usr/local/share/khmer/sandbox/split-pe.py vg.trimmed.fq
-python /usr/local/share/khmer/sandbox/split-pe.py w.trimmed.fq
+for i in vg w ; do
+  #Use the FASTX toolkit to trim off bases over 70 (replace with new number)
+  fastx_trimmer -Q33 -l 70 -i $i.combined.fastq > $i.trimmed.fq
+  #Split the paired reads 
+  python /usr/local/share/khmer/sandbox/split-pe.py $i.trimmed.fq
+done
 
 echo "**********QC DONE************"
 
@@ -55,34 +73,33 @@ bowtie-build /data/dmel_trinity/Trinity.fasta /mnt/map/denovo_bowtie
 # Map with bowtie
 echo "******** MAPPING WITH BOWTIE*********"
 cd /mnt/map
-bowtie -S -p 2 denovo_bowtie -1 vg.trimmed.fq.1 -2 vg.trimmed.fq.2 vg.paired.sam
-bowtie -S -p 2 denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.paired.sam
+bowtie -S -p 2 denovo_bowtie -1 vg.trimmed.fq.1 -2 vg.trimmed.fq.2 vg.sam
+bowtie -S -p 2 denovo_bowtie -1 w.trimmed.fq.1 -2 w.trimmed.fq.2 w.sam
 
 # Convert SAM files to indexed BAM files
+cp /data/dmel_trinity/Trinity.fasta /mnt/map/Trinity.fasta
 echo "******converting SAM to BAM********"
-samtools view -bS vg.paired.sam > vg.temp.bam
-samtools view -bS w.paired.sam > w.temp.bam
-
-samtools sort -f vg.temp.bam vg.paired.bam
-samtools sort -f w.temp.bam w.paired.bam
-
-samtools index vg.paired.bam
-samtools index w.paired.bam
-
+samtools faidx Trinity.fasta
+for i in vg w ; do
+  samtools view -Sb $i.sam > $i.temp.bam
+  samtools sort -f $i.temp.bam $i.bam
+  samtools index $i.bam
+done
 rm *.temp.bam
 echo "********* SAMs have been BAMed *************"
-
 
 # Make sure bedtools is installed
 # Using bedtools to calculate read counts
 echo "********bedtools analysis starting*********"
 cd /mnt/map
-coverageBed -s -abam vg.1.bam -b /data/dmel_trinity/final_dmel.bed > vg1.counts.txt
-coverageBed -s -abam vg.2.bam -b /data/dmel_trinity/final_dmel.bed > vg2.counts.txt
-coverageBed -s -abam w.1.bam -b /data/dmel_trinity/final_dmel.bed > w1.counts.txt
-coverageBed -s -abam w.2.bam -b /data/dmel_trinity/final_dmel.bed > w2.counts.txt
+cp /data/dmel_trinity/final_dmel.bed temp_dmel.bed
+sed '$d' temp_dmel.bed > final_dmel.bed
+bedtools multicov -q 30 -p -bams vg.bam w.bam -bed final_dmel.bed > transcriptome_counts.txt
 
 echo "********bedtools analysis FINISHED********"
+
+R --no-save < Rscript.R
+
 
 
 
