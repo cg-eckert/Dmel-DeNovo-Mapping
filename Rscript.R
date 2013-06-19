@@ -1,11 +1,11 @@
-transcriptome.data <- read.table("transcriptome_counts.txt", header=FALSE, col.names=c("id", "start", "len", "w_1", "w_2", "vg_1", "vg_2"))
+transcriptome.data <- read.table("transcriptome_counts.txt", header=FALSE, col.names=c("id", "start", "len", "vg_1", "vg_2", "w_1", "w_2"))
 
 source("http://bioconductor.org/biocLite.R")
 biocLite("edgeR")
 
 library(edgeR)
 
-edger.counts <- transcriptome.data[,c("w_1", "w_2", "vg_1", "vg_2")]
+edger.counts <- transcriptome.data[,c("vg_1", "vg_2", "w_1", "w_2")]
 edger.data <- DGEList(counts=edger.counts, group=c(1,1,2,2))
 
 edger.data.norm <- calcNormFactors(edger.data)
