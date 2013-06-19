@@ -30,7 +30,7 @@ VG2_2=/mnt/map/vg2_2.fastq
 W1_1=/mnt/map/w1_1.fastq
 W1_2=/mnt/map/w1_2.fastq
 W2_1=/mnt/map/w2_1.fastq
-W2_2=/mant/map/w2_2.fastq
+W2_2=/mnt/map/w2_2.fastq
 
 #VG1_1=vg1_1S.fastq
 #VG1_2=vg1_2S.fastq
