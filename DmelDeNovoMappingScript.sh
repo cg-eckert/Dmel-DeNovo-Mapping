@@ -21,33 +21,33 @@ cp SAMf_OREm_w_CAGATC_L005_R2_001.fastq.gz /mnt/map/w2_2.fastq.gz
 cd /mnt/map
 gunzip *.gz
 
-for i in *.fastq; do seqtk sample -s 11 $i 10000 > ${i/.fastq/S.fastq}; done
+#for i in *.fastq; do seqtk sample -s 11 $i 10000 > ${i/.fastq/S.fastq}; done
 
-#VG1_1=vg1_1.fastq
-#VG1_2=vg1_2.fastq
-#VG2_1=vg2_1.fastq
-#VG2_2=vg2_2.fastq
-#W1_1=w1_1.fastq
-#W1_2=w1_2.fastq
-#W2_1=w2_1.fastq
-#W2_2=w2_2.fastq
+VG1_1=vg1_1.fastq
+VG1_2=vg1_2.fastq
+VG2_1=vg2_1.fastq
+VG2_2=vg2_2.fastq
+W1_1=w1_1.fastq
+W1_2=w1_2.fastq
+W2_1=w2_1.fastq
+W2_2=w2_2.fastq
 
-VG1_1=vg1_1S.fastq
-VG1_2=vg1_2S.fastq
-VG2_1=vg2_1S.fastq
-VG2_2=vg2_2S.fastq
-W1_1=w1_1S.fastq
-W1_2=w1_2S.fastq
-W2_1=w2_1S.fastq
-W2_2=w2_2S.fastq
+#VG1_1=vg1_1S.fastq
+#VG1_2=vg1_2S.fastq
+#VG2_1=vg2_1S.fastq
+#VG2_2=vg2_2S.fastq
+#W1_1=w1_1S.fastq
+#W1_2=w1_2S.fastq
+#W2_1=w2_1S.fastq
+#W2_2=w2_2S.fastq
 
 
 #Start with some read QC
 cd /mnt
 rm -r QC
 mkdir /mnt/QC
-#/usr/local/share/FastQC/fastqc /mnt/map/*.fastq --outdir=/mnt/QC
-/usr/local/share/FastQC/fastqc /mnt/map/*S.fastq --outdir=/mnt/QC
+/usr/local/share/FastQC/fastqc /mnt/map/*.fastq --outdir=/mnt/QC
+#/usr/local/share/FastQC/fastqc /mnt/map/*S.fastq --outdir=/mnt/QC
 
 #Interleave the paired end reads in preparation for fastx trimming
 
@@ -101,7 +101,7 @@ bedtools multicov -q 30 -p -bams vg1.bam vg2.bam w1.bam w2.bam -bed final_dmel.b
 
 echo "********bedtools analysis FINISHED********"
 
-R --no-save < Rscript.R
+#R --no-save < Rscript.R
 
 
 
