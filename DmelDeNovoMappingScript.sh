@@ -103,7 +103,8 @@ bedtools multicov -q 30 -p -bams vg1.bam vg2.bam w1.bam w2.bam -bed final_dmel.b
 
 echo "********bedtools analysis FINISHED********"
 
-#R --no-save < Rscript.R
+#The end product of this pipeline is the file transcriptome_counts.txt
+#For thorough data exploration and plotting, it's probably best to analyze the file using the expression.R script on your local computer.
 
 
 
