@@ -1,4 +1,1 @@
-Dmel-DeNovo-Mapping
-===================
-
-This repository contains our awesome RNAseq mapping script
+This repository contains the scripts necessary to compare transcript expression between 
