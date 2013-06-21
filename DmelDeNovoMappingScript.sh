@@ -99,7 +99,7 @@ echo "********bedtools analysis starting*********"
 cd /mnt/map
 cp /data/dmel_trinity/final_dmel.bed temp_dmel.bed
 sed '$d' temp_dmel.bed > final_dmel.bed
-bedtools multicov -q 30 -p -bams vg1.bam vg2.bam w1.bam w2.bam -bed final_dmel.bed > transcriptome_counts.txt
+bedtools multicov -q 30 -p -bams vg1.sorted.bam vg2.sorted.bam w1.sorted.bam w2.sorted.bam -bed final_dmel.bed > transcriptome_counts.txt
 
 echo "********bedtools analysis FINISHED********"
 
